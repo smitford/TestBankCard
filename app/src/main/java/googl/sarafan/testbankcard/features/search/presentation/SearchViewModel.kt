@@ -3,6 +3,8 @@ package googl.sarafan.testbankcard.features.search.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import googl.sarafan.testbankcard.features.search.domain.use_case.CallNumberUseCase
+import googl.sarafan.testbankcard.features.search.domain.use_case.OpenLinkUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SaveCardSearchUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SearchUseCase
 import googl.sarafan.testbankcard.features.search.presentation.models.CardValue
@@ -21,6 +23,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase,
     private val saveCardSpecificationUseCase: SaveCardSearchUseCase,
+    private val openLinkUseCase: OpenLinkUseCase,
+    private val callNumberUseCase: CallNumberUseCase
 ) : ViewModel() {
     private val _stateScreen = MutableStateFlow(SearchState())
     private val stateScreen: StateFlow<SearchState> = _stateScreen.asStateFlow()
@@ -50,9 +54,14 @@ class SearchViewModel @Inject constructor(
                 searchCard()
             }
 
-            is SearchEvent.SaveCardSpecification -> {}
-            is SearchEvent.OpenUrl -> {}
-            is SearchEvent.CallBank -> {}
+            is SearchEvent.OpenUrl -> {
+                openUrl()
+            }
+
+            is SearchEvent.CallBank -> {
+                callBank()
+            }
+
             is SearchEvent.OnCardNumberChanged -> {
                 changeCardNumber(event.cardNumber)
             }
@@ -104,11 +113,15 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun openUrl() {
-
+        val url = _stateScreen.value.cardValue.bank.url
+        if (url != "-" && url.isNotBlank())
+            openLinkUseCase.invoke(url)
     }
 
     private fun callBank() {
-
+        val phoneNumber = _stateScreen.value.cardValue.bank.phone
+        if (phoneNumber != "-" && phoneNumber.isNotBlank())
+            callNumberUseCase.invoke(phoneNumber)
     }
 
 }

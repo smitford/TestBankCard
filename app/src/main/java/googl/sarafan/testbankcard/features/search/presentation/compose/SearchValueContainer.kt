@@ -21,6 +21,7 @@ import googl.sarafan.testbankcard.R
 import googl.sarafan.testbankcard.features.search.presentation.models.Bank
 import googl.sarafan.testbankcard.features.search.presentation.models.CardValue
 import googl.sarafan.testbankcard.features.search.presentation.models.Country
+import googl.sarafan.testbankcard.features.search.presentation.models.SearchEvent
 import googl.sarafan.testbankcard.uikit.compose.DualInfoRow
 import googl.sarafan.testbankcard.uikit.compose.TextLabeledColumn
 import googl.sarafan.testbankcard.uikit.compose.TextLabeledRow
@@ -28,7 +29,8 @@ import googl.sarafan.testbankcard.uikit.compose.TextLabeledRow
 @Composable
 fun SearchValueContainer(
     cardValue: CardValue,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onEvent: (event: SearchEvent) -> Unit
 ) {
     val (bankName, bankUrl, bankPhone, bankCity) = cardValue.bank
     val (countryName, countryLatitude, countryLongitude) = cardValue.country
@@ -68,14 +70,18 @@ fun SearchValueContainer(
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = bankPhone,
-                    modifier = Modifier.clickable { },
+                    modifier = Modifier.clickable {
+                        onEvent.invoke(SearchEvent.CallBank)
+                    },
                     color = Color.Blue,
                     textDecoration = TextDecoration.Underline
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = bankUrl,
-                    modifier = Modifier.clickable { },
+                    modifier = Modifier.clickable {
+                        onEvent.invoke(SearchEvent.OpenUrl)
+                    },
                     color = Color.Blue,
                     textDecoration = TextDecoration.Underline
                 )
@@ -103,7 +109,8 @@ fun SearchValueContainerPreview() {
                 phone = "8 912 374 85 34",
                 city = "bankCity"
             )
-        )
+        ),
+        onEvent = {}
     )
 
 }

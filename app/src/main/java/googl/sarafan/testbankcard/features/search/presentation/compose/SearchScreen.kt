@@ -92,7 +92,8 @@ fun SearchScreen(
             Spacer(modifier = Modifier.height(24.dp))
             SearchValueContainer(
                 cardValue = state.cardValue,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onEvent = onEvent
             )
 
         }

@@ -5,6 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import googl.sarafan.testbankcard.features.search.data.CardNetworkRepository
+import googl.sarafan.testbankcard.features.search.domain.use_case.CallNumberUseCase
+import googl.sarafan.testbankcard.features.search.domain.use_case.OpenLinkUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SaveCardSearchUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SearchUseCase
 import javax.inject.Singleton
@@ -36,4 +38,19 @@ class SearchDi {
         return saveCardSearchUseCase
     }
 
+    @Provides
+    @Singleton
+    fun provideCallNumberUseCase(
+        callNumberUseCase: CallNumberUseCase.Base
+    ): CallNumberUseCase {
+        return callNumberUseCase
+    }
+
+    @Provides
+    @Singleton
+    fun provideOpenLinkUseCase(
+        openLinkUseCase: OpenLinkUseCase.Base
+    ): OpenLinkUseCase {
+        return openLinkUseCase
+    }
 }
