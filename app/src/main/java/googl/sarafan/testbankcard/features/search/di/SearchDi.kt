@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import googl.sarafan.testbankcard.features.search.data.CardNetworkRepository
 import googl.sarafan.testbankcard.features.search.domain.use_case.CallNumberUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.OpenLinkUseCase
+import googl.sarafan.testbankcard.features.search.domain.use_case.OpenMapUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SaveCardSearchUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SearchUseCase
 import javax.inject.Singleton
@@ -52,5 +53,14 @@ class SearchDi {
         openLinkUseCase: OpenLinkUseCase.Base
     ): OpenLinkUseCase {
         return openLinkUseCase
+    }
+
+    @Provides
+    @Singleton
+    fun provideOpenMapUseCase(
+        openMapUseCase: OpenMapUseCase.Base
+    ): OpenMapUseCase {
+        return openMapUseCase
+
     }
 }

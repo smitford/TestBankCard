@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import googl.sarafan.testbankcard.features.search.domain.use_case.CallNumberUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.OpenLinkUseCase
+import googl.sarafan.testbankcard.features.search.domain.use_case.OpenMapUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SaveCardSearchUseCase
 import googl.sarafan.testbankcard.features.search.domain.use_case.SearchUseCase
 import googl.sarafan.testbankcard.features.search.presentation.models.CardValue
@@ -24,7 +25,8 @@ class SearchViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase,
     private val saveCardSpecificationUseCase: SaveCardSearchUseCase,
     private val openLinkUseCase: OpenLinkUseCase,
-    private val callNumberUseCase: CallNumberUseCase
+    private val callNumberUseCase: CallNumberUseCase,
+    private val openMapUseCase: OpenMapUseCase
 ) : ViewModel() {
     private val _stateScreen = MutableStateFlow(SearchState())
     private val stateScreen: StateFlow<SearchState> = _stateScreen.asStateFlow()
@@ -60,6 +62,10 @@ class SearchViewModel @Inject constructor(
 
             is SearchEvent.CallBank -> {
                 callBank()
+            }
+
+            is SearchEvent.OpenMap -> {
+                openMap()
             }
 
             is SearchEvent.OnCardNumberChanged -> {
@@ -108,8 +114,10 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun saveCardSpecification() {
-
+    private fun openMap() {
+        val latitude = _stateScreen.value.cardValue.country.latitude
+        val longitude = _stateScreen.value.cardValue.country.longitude
+        openMapUseCase.invoke(latitude, longitude)
     }
 
     private fun openUrl() {
