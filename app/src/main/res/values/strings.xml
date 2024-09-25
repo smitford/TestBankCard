@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">TestBankCard</string>
+    <string name="edit_text_label">Enter the first 6 to 8 digits of a card number (BIN/IIN) </string>
+    <string name="edit_text_card_number_hint">Enter the card number</string>
+    <string name="country">Country</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="bank">Bank</string>
+    <string name="card_scheme">Scheme</string>
+    <string name="clear_history">Clear history</string>
+    <string name="card_type">Card type</string>
+    <string name="bank_url">Bank URL</string>
+    <string name="bank_phone">Bank phone</string>
+    <string name="city">City</string>
+    <string name="card_number">Card number</string>
+
 </resources>

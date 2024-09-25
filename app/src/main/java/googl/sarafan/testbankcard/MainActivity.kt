@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -27,27 +26,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import googl.sarafan.testbankcard.history.presentation.compose.HistoryScreen
+import dagger.hilt.android.AndroidEntryPoint
+import googl.sarafan.testbankcard.features.history.presentation.compose.HistoryScreen
+import googl.sarafan.testbankcard.features.search.presentation.compose.SearchScreen
 import googl.sarafan.testbankcard.navigation.BankNavigationDrawer
+import googl.sarafan.testbankcard.navigation.HistoryScreen
 import googl.sarafan.testbankcard.navigation.NavigationItem
-import googl.sarafan.testbankcard.navigation.ScreenA
-import googl.sarafan.testbankcard.navigation.ScreenB
-import googl.sarafan.testbankcard.search.presentation.compose.SearchScreen
-import googl.sarafan.testbankcard.ui.theme.TestBankCardTheme
+import googl.sarafan.testbankcard.navigation.SearchScreen
+import googl.sarafan.testbankcard.uikit.theme.TestBankCardTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             TestBankCardTheme {
                 val navController = rememberNavController()
@@ -57,17 +62,24 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                     val scope = rememberCoroutineScope()
+                    var selectedItemIndex by rememberSaveable {
+                        mutableIntStateOf(0)
+                    }
 
                     BankNavigationDrawer(
                         drawerState = drawerState,
                         items = items,
                         navController = navController,
-                        scope = scope
+                        scope = scope,
+                        selectedItemIndex = selectedItemIndex
                     ) {
                         MainApp(
                             scope = scope,
                             drawerState = drawerState,
-                            navController = navController
+                            navController = navController,
+                            changeSelectedItemIndex = { index ->
+                                selectedItemIndex = index
+                            }
                         )
                     }
                 }
@@ -79,7 +91,8 @@ class MainActivity : ComponentActivity() {
     fun MainApp(
         scope: CoroutineScope,
         drawerState: DrawerState,
-        navController: NavHostController
+        navController: NavHostController,
+        changeSelectedItemIndex: (Int) -> Unit
     ) {
 
         Scaffold(
@@ -93,21 +106,23 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = ScreenA,
+                startDestination = SearchScreen,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                composable<ScreenA> {
+                composable<SearchScreen> {
                     SearchScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     )
+                    changeSelectedItemIndex(0)
                 }
 
-                composable<ScreenB> {
+                composable<HistoryScreen> {
                     HistoryScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     )
+                    changeSelectedItemIndex(1)
                 }
             }
         }
@@ -143,14 +158,14 @@ class MainActivity : ComponentActivity() {
                 title = "All",
                 selectedIcon = Icons.Filled.Home,
                 unselectedIcon = Icons.Outlined.Home,
-                route = ScreenA
+                route = SearchScreen
             ),
             NavigationItem(
                 title = "Urgent",
                 selectedIcon = Icons.Filled.Info,
                 unselectedIcon = Icons.Outlined.Info,
                 badgeCount = 45,
-                route = ScreenB
+                route = HistoryScreen
             ),
         )
     }
