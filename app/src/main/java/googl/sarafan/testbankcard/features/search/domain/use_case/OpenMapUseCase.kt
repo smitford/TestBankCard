@@ -6,18 +6,24 @@ import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-interface OpenLinkUseCase {
-    fun invoke(url: String)
+interface OpenMapUseCase {
+    fun invoke(latitude: Float, longitude: Float)
+
     class Base @Inject constructor(@ApplicationContext private val context: Context) :
-        OpenLinkUseCase {
-        override fun invoke(url: String) {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+        OpenMapUseCase {
+        override fun invoke(latitude: Float, longitude: Float) {
+            val geoUri = Uri.parse("geo:$latitude,$longitude")
+            val mapIntent = Intent(Intent.ACTION_VIEW, geoUri).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
             try {
-                context.startActivity(browserIntent)
+                context.startActivity(mapIntent)
             } catch (_: Exception) {
             }
+
+
         }
+
     }
+
 }

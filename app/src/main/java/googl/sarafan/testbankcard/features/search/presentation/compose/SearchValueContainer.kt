@@ -55,7 +55,10 @@ fun SearchValueContainer(
                 firstLabel = stringResource(R.string.latitude),
                 firstValue = countryLatitude.toString(),
                 secondLabel = stringResource(R.string.longitude),
-                secondValue = countryLongitude.toString()
+                secondValue = countryLongitude.toString(),
+                onClick = {
+                    onEvent.invoke(SearchEvent.OpenMap)
+                }
             )
         }
 

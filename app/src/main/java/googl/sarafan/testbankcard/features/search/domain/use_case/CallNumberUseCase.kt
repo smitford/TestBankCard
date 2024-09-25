@@ -12,7 +12,9 @@ interface CallNumberUseCase {
         @ApplicationContext private val context: Context
     ) : CallNumberUseCase {
         override fun invoke(phoneNumber: String) {
-            val callIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+            val callIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber")).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
             try {
                 context.startActivity(callIntent)
             } catch (_: Exception) {
