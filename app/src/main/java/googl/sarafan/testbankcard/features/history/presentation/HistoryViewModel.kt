@@ -57,6 +57,7 @@ class HistoryViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             deleteHistoryUseCase.invoke()
+            getHistory()
             _historyState.update {
                 it.copy(
                     isLoading = false
