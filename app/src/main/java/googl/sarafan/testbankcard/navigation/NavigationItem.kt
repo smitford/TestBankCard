@@ -14,7 +14,7 @@ data class NavigationItem(
 
 
 @Serializable
-object ScreenA
+object SearchScreen
 
 @Serializable
-object ScreenB
+object HistoryScreen

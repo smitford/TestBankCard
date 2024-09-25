@@ -11,10 +11,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -27,11 +23,10 @@ fun BankNavigationDrawer(
     items: List<NavigationItem>,
     navController: NavHostController,
     scope: CoroutineScope,
+    selectedItemIndex :Int,
     content: @Composable () -> Unit
 ) {
-    var selectedItemIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
+
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
@@ -44,7 +39,7 @@ fun BankNavigationDrawer(
                         selected = index == selectedItemIndex,
                         onClick = {
                             navController.navigate(item.route)
-                            selectedItemIndex = index
+                           // selectedItemIndex = index
                             scope.launch {
                                 drawerState.close()
                             }
